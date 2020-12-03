@@ -7,8 +7,8 @@ GIT_UNPULLED="${GIT_UNPULLED:-⇣}"
 GIT_UNPUSHED="${GIT_UNPUSHED:-⇡}"
 
 # YARN
-YARN_ENABLED=true
-TOUCHBAR_GIT_ENABLED=true
+YARN_ENABLED=false
+TOUCHBAR_GIT_ENABLED=false
 
 # https://unix.stackexchange.com/a/22215
 find-up () {
@@ -168,14 +168,19 @@ function _displayDefault() {
 
   # PACKAGE.JSON
   # ------------
+  NPM_KEY_INDEX=6
+  if [[ "$TOUCHBAR_GIT_ENABLED" = false ]]; then
+    NPM_KEY_INDEX=2
+  fi
+
   if [[ $(find-up package.json) != "" ]]; then
       if [[ $(find-up yarn.lock) != "" ]] && [[ "$YARN_ENABLED" = true ]]; then
-          setKey 6 "🐱 yarn-run" _displayYarnScripts '-q'
+          setKey $NPM_KEY_INDEX "🐱 yarn-run" _displayYarnScripts '-q'
       else
-          setKey 6 "⚡️ npm-run" _displayNpmScripts '-q'
+          setKey $NPM_KEY_INDEX "⚡️ npm-run" _displayNpmScripts '-q'
     fi
   else
-      clearKey 6
+      clearKey $NPM_KEY_INDEX
   fi
 }
 
